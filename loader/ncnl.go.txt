@@ -1,0 +1,69 @@
+package loader
+
+import (
+	configs "bangbang/configs"
+	tools "bangbang/tools"
+	"encoding/json"
+	"fmt"
+	"os"
+	"os/exec"
+	"strings"
+
+	"github.com/laof/ssdata"
+)
+
+type Data struct {
+	Time string   `json:"time"`
+	List []string `json:"list"`
+}
+
+type Ncnl struct{}
+
+func (ncnl Ncnl) Run() (info ssdata.List) {
+	// url := "http://localhost:6200/test.html"
+
+	info = ssdata.List{Name: configs.Ncnl, Remarks: ssdata.ReverseString("科斯莫-斯罗俄")}
+	fmt.Println("GO ==> " + info.Name)
+	installCmd := exec.Command("npm", "install")
+	startCmd := exec.Command("npm", "run", "start")
+	pa, _ := os.Getwd()
+	installCmd.Dir = pa
+	startCmd.Dir = pa
+	installCmd.Stdout = os.Stdout
+	installCmd.Stderr = os.Stderr
+	err := installCmd.Run()
+	if err != nil {
+		fmt.Println("Error: 依赖安装 " + err.Error())
+		return
+	}
+
+	fmt.Println("依赖安装完成")
+
+	output, err := startCmd.CombinedOutput()
+	if err != nil {
+		fmt.Println("Error: 执行命令 " + err.Error())
+		return
+	}
+
+	ok := ""
+
+	arr := strings.Split(string(output), "(￣(***)￣)")
+
+	if len(arr) >= 2 {
+		ok = arr[1]
+	} else {
+		fmt.Println("Error output: 数据不够 ")
+		return
+	}
+
+	var data Data
+
+	json.Unmarshal([]byte(ok), &data)
+
+	if data.Time != "" {
+		// 09月27日 10点15分
+		info.Datetime = tools.NcnlTime(data.Time)
+	}
+	info.Nodes = data.List
+	return
+}

@@ -1,0 +1,29 @@
+import puppeteer from 'puppeteer'
+
+async function main() {
+  const browser = await puppeteer.launch({ headless: 'new' })
+  const page = await browser.newPage()
+  const link = ['https://ln', 'cn.org'].join('')
+  await page.goto(link, { waitUntil: 'domcontentloaded' })
+  const ele = ['.', 'copy', '-all'].join('')
+  await page.waitForSelector(ele)
+  const data = await page.evaluate(() => {
+    return new Promise((resolve) => {
+      let timer
+      const btn = ['.', 'copy', '-all'].join('')
+      const obj = { time: '', list: [] }
+      navigator.clipboard.writeText = function (txt) {
+        obj.time = document.querySelector('.time').innerText || ''
+        obj.list = txt.split('\n')
+        return resolve(obj), Promise.resolve('')
+      }
+      const ele = document.querySelector(btn)
+      timer = setInterval(() => ele.click(), 600)
+      setTimeout(() => [clearInterval(timer), resolve(obj)], 1000 * 60)
+    })
+  })
+  await browser.close()
+  console.log('(￣(***)￣)' + JSON.stringify(data))
+}
+
+main()

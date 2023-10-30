@@ -1,0 +1,48 @@
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/chromedp/cdproto/runtime"
+	"github.com/chromedp/chromedp"
+)
+
+func main() {
+	get()
+}
+
+func get() {
+	url := "https://ln"+"cn.org"
+	// url := "https://www.baidu.com"
+	// url := "http://localhost:6200/test.html"
+	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+		chromedp.Flag("headless", true),
+	)
+	allocCtx, cancel := chromedp.NewExecAllocator(context.Background(), opts...)
+	defer cancel()
+	fmt.Println("333")
+	ctx, cancel := chromedp.NewContext(allocCtx)
+	defer cancel()
+	fmt.Println("555")
+	js := `new Promise((resolve) => setTimeout(() => resolve(document.title), 1000));`
+
+	var data = ""
+	// ele := ".copy" + "-all"
+
+	if err := chromedp.Run(ctx,
+		chromedp.Navigate(url),
+		// chromedp.WaitVisible(ele, chromedp.ByQuery),
+		// chromedp.Sleep(time.Second*40),
+		chromedp.Evaluate(js, &data, func(p *runtime.EvaluateParams) *runtime.EvaluateParams {
+			return p.WithAwaitPromise(true)
+		}),
+	); err != nil {
+		fmt.Println("err.Error(fdfaaff )")
+		fmt.Println(err.Error())
+		return
+	}
+
+	fmt.Println("56666--55")
+	fmt.Println(data)
+}

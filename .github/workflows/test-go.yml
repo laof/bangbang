@@ -1,0 +1,33 @@
+name: Test
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Force Mode'
+        required: true
+        default: Y
+        type: choice
+        options:
+          - Y
+          - N
+
+jobs:
+  Tester:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.head_commit.message == 'update' || github.event.inputs.mode  }}
+
+    steps:
+
+      - name: loading...
+        uses: actions/checkout@v3
+
+      - name: Install Golang
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21.3
+
+      - name: go run test
+        run: go run test/main.go 
+

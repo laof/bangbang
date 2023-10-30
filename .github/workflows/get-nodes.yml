@@ -1,0 +1,67 @@
+name: My job
+
+on:
+  push:
+  schedule:
+    - cron: '0 */1 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Force Mode'
+        required: true
+        default: Y
+        type: choice
+        options:
+          - Y
+          - N
+
+jobs:
+  worker:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.head_commit.message == 'update' || github.event.inputs.mode || github.event.schedule }}
+
+    # fuck requirement!!!
+    outputs:
+      output1: ${{ steps.step1.outputs.result }}
+
+    steps:
+
+      - name: loading...
+        uses: actions/checkout@v3
+
+      - name: Install Golang
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21.3
+
+      - name: go run cmd/main.go ${{github.event.inputs.mode}}
+        id: step1
+        run: go run cmd/main.go ${{github.event.inputs.mode}}
+
+      - name: Upload Artifacts # The project is then uploaded as an artifact named 'site'.
+        if: ${{ steps.step1.outputs.result != '' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: site
+          path: output
+          retention-days: 1 # <= 这里可以设置保留天数1
+
+      - uses: JamesIves/github-pages-deploy-action@v4.4.2
+        if: ${{ steps.step1.outputs.result != '' }}
+        with:
+          token: ${{ secrets.CDAPK }}
+          folder: output
+          repository-name: laof/get-nodes-test-app
+          target-folder: json
+          branch: main
+          clean: true
+          force: true
+          commit-message: update nodes
+
+  develop:
+    needs: worker
+    runs-on: ubuntu-latest
+    if: ${{ needs.worker.outputs.output1 != '' }}
+    steps:
+      - name: end
+        run: exit 0

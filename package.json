@@ -1,0 +1,12 @@
+{
+  "name": "bangbang",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node scripts/worker.js"
+  },
+  "type": "module",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^20.9.0"
+  }
+}

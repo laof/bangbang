@@ -31,7 +31,7 @@ func getTime(txt string) string {
 
 func getNodes(txt, ss string) []string {
 	arr := []string{}
-	re := regexp.MustCompile(`<p>` + ss + `(.*?)</p>`)
+	re := regexp.MustCompile(`<pre>` + ss + `(.*?)</pre>`)
 	matches := re.FindAllStringSubmatch(txt, -1)
 	for _, match := range matches {
 		if len(match) >= 2 {

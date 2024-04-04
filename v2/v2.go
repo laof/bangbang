@@ -30,7 +30,8 @@ type VmessNode struct {
 
 func Start() {
 
-	c := make(chan ssdata.List, 3)
+	n := 2
+	c := make(chan ssdata.List, n)
 
 	// go site.Free(c)
 	go site.A999(c)
@@ -54,7 +55,7 @@ func Start() {
 			}
 		}
 
-		if len(list) >= 3 {
+		if len(list) >= n {
 			close(c)
 			break
 		}

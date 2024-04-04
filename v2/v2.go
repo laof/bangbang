@@ -32,9 +32,10 @@ func Start() {
 
 	c := make(chan ssdata.List, 3)
 
-	go site.Free(c)
+	// go site.Free(c)
 	go site.A999(c)
-	go site.Wen(c)
+	go site.A999r(c)
+	// go site.Wen(c)
 
 	list := []ssdata.List{}
 	txt := []string{}

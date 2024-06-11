@@ -46,7 +46,7 @@ jobs:
           path: output
           retention-days: 1 # <= 这里可以设置保留天数1
 
-      - uses: JamesIves/github-pages-deploy-action@v4.4.2
+      - uses: JamesIves/github-pages-deploy-action@v4
         if: ${{ steps.step1.outputs.result != '' }}
         with:
           token: ${{ secrets.CDAPK }}

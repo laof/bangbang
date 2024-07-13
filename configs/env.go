@@ -7,4 +7,4 @@ const (
 	Nivla9999 = "al" + "vin" + "9999"
 )
 
-var All = []string{Ncnl, Feiqiang, Nivla9999, Blogpwen}
+var All = []string{Ncnl, Nivla9999}

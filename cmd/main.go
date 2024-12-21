@@ -33,6 +33,8 @@ func run() {
 
 	arr, exiti := tools.Check()
 
+	tools.GoLoad()
+
 	if len(arr) == 0 {
 		tools.Cancel()
 		return

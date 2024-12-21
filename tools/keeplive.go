@@ -1,8 +1,10 @@
 package tools
 
 import (
+	"io"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func Keeplive() {
@@ -19,7 +21,9 @@ func refresh(url string) {
 		return
 	}
 
-	log.Println("Keep live success：" + url)
+	txt, _ := io.ReadAll(res.Body)
+
+	log.Println("Keep live success：" + strconv.Itoa(len(string(txt))) + " " + url)
 	defer res.Body.Close()
 
 }

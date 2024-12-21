@@ -8,7 +8,7 @@ import (
 
 func GoLoad() {
 
-	res, err := http.Get("https://hwfmd6-8080.csb.app")
+	res, err := http.Get("https://hwfmd6-8080.csb.app/keeplive")
 
 	if err != nil {
 		log.Println("Error hwfmd6 : " + err.Error())

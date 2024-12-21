@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	tools.GoLoad()
+	tools.Keeplive()
 }

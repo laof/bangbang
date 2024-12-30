@@ -33,7 +33,7 @@ func run() {
 
 	arr, exiti := tools.Check()
 
-	tools.Keeplive()
+	// tools.Keeplive()
 
 	if len(arr) == 0 {
 		tools.Cancel()
